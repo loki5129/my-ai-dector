@@ -15,7 +15,10 @@ def timeout_handler():
     print("Time")
 
 
-    
+def list_to_float(list):
+   for i in range(len(list)):
+    list[i] = float(list[i])
+   return list    
 
 def perplexity(file):
  from pyplexity import PerplexityModel, PerplexityProcessor
@@ -153,35 +156,34 @@ with open("burst.txt") as f:
       burst_data = f.read().split("\n")
 with open("lenght.txt") as f:
       length_data = f.read().split("\n")
-for i in range(len(perpl_data)):
-   perpl_data[i] = float(perpl_data[i])
-for i in range(len(read_data)):
-   read_data[i]=float(read_data[i])
-for i in range(len(burst_data)):
-   burst_data[i] = float(burst_data[i])
-for i in range(len(length_data)):
-   length_data[i] = float(length_data[i])
+
+perpl_data=list_to_float(perpl_data)
+read_data = list_to_float(read_data)
+length_data = list_to_float(length_data)
+burst_data = list_to_float(burst_data)
+
  
 
 
 def is_it_ai(file):
    score =0
+   train = input("is this a triangin run: ")
    burst = burstiness(file)
    average_sentence_lenght = sentence_length(file)
    perpl = perplexity(file)
    read = readabilty(file)
-
+   
   
 
    
-      
-   with open("lenght.txt","a+") as f:
+   if train == "yes":
+    with open("lenght.txt","a+") as f:
            f.write("\n" +str(average_sentence_lenght))
-   with open("pep.txt","a+") as f:
+    with open("pep.txt","a+") as f:
       f.write("\n" +str(perpl))
-   with open("burst.txt","a+") as f:
+    with open("burst.txt","a+") as f:
       f.write("\n" +str(burst))
-   with open("read.txt","a+") as f:
+    with open("read.txt","a+") as f:
       f.write("\n" +str(read))
    
    print("perplexity: ",perpl)
@@ -199,18 +201,18 @@ def is_it_ai(file):
    
    mean_sentence_length = calculate_mean(length_data)
    std_length = calculate_standard_deviation(length_data)
-   score += max(0, 5 - (abs(average_sentence_lenght - mean_sentence_length) / std_length))  
+   score += max(0, 20 - (abs(average_sentence_lenght - mean_sentence_length) / std_length))  
   
    
    mean_burst = calculate_mean(burst_data)
    std_burst = calculate_standard_deviation(burst_data)
-   score += max(0, 5 - (abs(burst - mean_burst) / std_burst))
+   score += max(0, 20 - (abs(burst - mean_burst) / std_burst))
    
    mean_read = calculate_mean(read_data)
    std_read = calculate_standard_deviation(read_data)
-   score += max(0, 5 - (abs(read- mean_read) / std_read))
+   score += max(0, 20 - (abs(read- mean_read) / std_read))
    
-   threshold_score = 0.75 * 20 # Calculate based on empirical data
+   threshold_score = 0.75 * 100 # Calculate based on empirical data
    if score >= threshold_score:
     print("score: ", score)
     return True
