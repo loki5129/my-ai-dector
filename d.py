@@ -20,6 +20,8 @@ def list_to_float(list):
     list[i] = float(list[i])
    return list    
 
+
+
 def perplexity(file):
  from pyplexity import PerplexityModel, PerplexityProcessor
  import threading
@@ -167,7 +169,7 @@ burst_data = list_to_float(burst_data)
 
 def is_it_ai(file):
    score =0
-   train = input("is this a triangin run: ")
+   train = input("is this a training run: ")
    burst = burstiness(file)
    average_sentence_lenght = sentence_length(file)
    perpl = perplexity(file)
@@ -176,7 +178,7 @@ def is_it_ai(file):
   
 
    
-   if train == "yes":
+   if train.lower() == "yes" or train.lower() == "y":
     with open("lenght.txt","a+") as f:
            f.write("\n" +str(average_sentence_lenght))
     with open("pep.txt","a+") as f:
@@ -212,11 +214,12 @@ def is_it_ai(file):
    std_read = calculate_standard_deviation(read_data)
    score += max(0, 20 - (abs(read- mean_read) / std_read))
    
-   threshold_score = 0.75 * 100 # Calculate based on empirical data
+   threshold_score = 0.65 * 100 # Calculate based on empirical data
    if score >= threshold_score:
     print("score: ", score)
     return True
    else:
+     print(score)
      return False
 a = is_it_ai(contents)
 print(a)
