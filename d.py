@@ -67,7 +67,6 @@ def sentence_length(file):
 
 
 
-
 def burstiness(file):
    from re import split
    #B = (λ — k) / (λ + k):
@@ -188,39 +187,48 @@ def is_it_ai(file):
     with open("read.txt","a+") as f:
       f.write("\n" +str(read))
    
-   print("perplexity: ",perpl)
-   print("sentence length: ",average_sentence_lenght)
-   print("burstiness: ",burst)
    
-   print("readituly: ",read)
+   
+   
+   
+   
 
    
    mean_perpl = calculate_mean(perpl_data)
    std_peprl = calculate_standard_deviation(perpl_data)
-
-   score += max(0, 5 - (abs(perpl - mean_perpl) / std_peprl))
-
+   score += max(0, 20 - (abs(perpl - mean_perpl) / std_peprl))
+   print("perplexity: ",perpl)
+   print(score)
    
    mean_sentence_length = calculate_mean(length_data)
    std_length = calculate_standard_deviation(length_data)
    score += max(0, 20 - (abs(average_sentence_lenght - mean_sentence_length) / std_length))  
+   print("sentence length: ",average_sentence_lenght)
+   print(score)
   
    
    mean_burst = calculate_mean(burst_data)
    std_burst = calculate_standard_deviation(burst_data)
    score += max(0, 20 - (abs(burst - mean_burst) / std_burst))
+   print("burstiness: ",burst)
+   print(score)
    
    mean_read = calculate_mean(read_data)
    std_read = calculate_standard_deviation(read_data)
    score += max(0, 20 - (abs(read- mean_read) / std_read))
+   print("readituly: ",read)
+   print(score)
    
    threshold_score = 0.65 * 100 # Calculate based on empirical data
-   if score >= threshold_score:
+   if score <threshold_score:
     print("score: ", score)
-    return True
-   else:
+    return "human"
+   elif score >= threshold_score and score < 70:
      print(score)
-     return False
+     return "possilbe ai"
+   elif score >= 70:
+      print(score)
+      return "ai"
 a = is_it_ai(contents)
 print(a)
 
